@@ -1,0 +1,27 @@
+{
+  "name": "y",
+  "version": "1.0.0",
+  "description": "A Simple Bot to Post to Discord",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jitenpatel7/node_discord_bot.git"
+  },
+  "keywords": [
+    "discord",
+    "node"
+  ],
+  "author": "Jiten Patel",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jitenpatel7/node_discord_bot/issues"
+  },
+  "homepage": "https://github.com/jitenpatel7/node_discord_bot#readme",
+  "dependencies": {
+    "discord.js": "^12.1.1",
+    "eslint": "^6.8.0"
+  }
+}
