@@ -22,8 +22,10 @@
   "homepage": "https://github.com/jitenpatel7/node_discord_bot#readme",
   "dependencies": {
     "discord.js": "^12.1.1",
-    "eslint": "^6.8.0",
-    "nodemon": "^2.0.3",
     "puppeteer": "^2.1.1"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "nodemon": "^2.0.3"
   }
 }
