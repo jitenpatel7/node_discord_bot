@@ -9,7 +9,7 @@ module.exports = {
 
 			const untappdURL = `https://untappd.com/user/${args}`;
 
-			const browser = await puppeteer.launch();
+			const browser = await puppeteer.launch({ headless: true, args:['--no-sandbox'] });
 			const page = await browser.newPage();
 
 			await page.goto(untappdURL, { waitUntil: 'networkidle2' });
