@@ -1,36 +1,48 @@
 const puppeteer = require('puppeteer');
+const fetch = require('node-fetch');
 
 module.exports = {
 	name: 'lb',
-	description: 'Show off your latest beer!',
+	description: 'Show off your latest beer! (Requires Untappd profile to be public)',
 	args:true,
 	execute(message, args) {
-		(async () => {
+		const untappdURL = `https://untappd.com/user/${args}`;
 
-			const untappdURL = `https://untappd.com/user/${args}`;
+		fetch(untappdURL)
+			.then((res) => {
+				console.log(res);
 
-			const browser = await puppeteer.launch({ headless: true, args:['--no-sandbox'] });
-			const page = await browser.newPage();
+				if (res.statusText != 'OK') {
+					message.channel.send(`Unable to find Untappd user ${args}`);
+				}
+				else {
+					(async () => {
 
-			await page.goto(untappdURL, { waitUntil: 'networkidle2' });
+						message.channel.send(`Let's all judge ${args}'s latest tipple`);
 
-			const latestCheckIn = await page.evaluate(() => {
+						const browser = await puppeteer.launch({ headless: true, args:['--no-sandbox'] });
+						const page = await browser.newPage();
 
-				const checkInDetails = document.querySelector('div[class="top"] > p').innerText;
-				const details = document.querySelector('div[class="bottom"] > a').getAttribute('href');
+						await page.goto(untappdURL, { waitUntil: 'networkidle2' });
 
-				return {
-					checkInDetails,
-					details,
-				};
+						const latestCheckIn = await page.evaluate(() => {
 
+							const checkInDetails = document.querySelector('div[class="top"] > p').innerText;
+							const details = document.querySelector('div[class="bottom"] > a').getAttribute('href');
+
+							return {
+								checkInDetails,
+								details,
+							};
+						});
+
+						const detailsURL = `https://untappd.com${latestCheckIn.details}`;
+
+						message.channel.send(`${latestCheckIn.checkInDetails}\nLinky: ${detailsURL}`);
+
+						await browser.close();
+					})();
+				}
 			});
-
-			const detailsURL = `https://untappd.com/${latestCheckIn.details}`;
-
-			message.channel.send(`${latestCheckIn.checkInDetails}\nLinky: ${detailsURL}`);
-
-			await browser.close();
-		})();
 	},
 };

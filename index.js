@@ -21,7 +21,9 @@ client.on('message', message => {
 	const args = message.content.slice(prefix.length).split(/ +/);
 	const commandName = args.shift().toLowerCase();
 
-	if (!client.commands.has(commandName)) return;
+	if (!client.commands.has(commandName)) {
+		return message.channel.send(`Hey ${message.author}, ${commandName} is not a valid command. Maybe **!help** may, umm help?`);
+	}
 
 	const command = client.commands.get(commandName);
 
@@ -35,7 +37,7 @@ client.on('message', message => {
 	}
 	catch (error) {
 		console.error(error);
-		message.reply('there was an error trying to execute that command!');
+		message.channel.send('There was an error trying to execute that command!');
 	}
 });
 
