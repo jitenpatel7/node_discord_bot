@@ -1,0 +1,9 @@
+image: node:12.16.2-stretch
+
+cache:
+  paths:
+    - node_modules/
+
+test_async:
+  script:
+    - npm install
