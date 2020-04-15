@@ -9,7 +9,7 @@ test_async:
     - npm ci --only=production
 
 linting:
-  stage: Lint Docker Images
+  stage: test
   image: node:4-alpine
   script:
     - npm install -g dockerlint && npm cache clean
