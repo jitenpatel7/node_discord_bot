@@ -8,8 +8,20 @@ test_async:
   script:
     - npm ci --only=production
 
+linting:
+  stage: test
+  image: node:4-alpine
+  script:
+    - npm install -g dockerlint && npm cache clean
+    - find ./ -name Dockerfile -exec dockerlint {} \;
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'master'
+
 deploy:
   stage: deploy
+  image: docker:latest
+  services:
+    - docker:dind
   script:
     - docker build -t registry.gitlab.com/jitenpatel7/node_discord_bot .
     - docker push registry.gitlab.com/jitenpatel7/node_discord_bot
