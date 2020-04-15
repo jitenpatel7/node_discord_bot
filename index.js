@@ -1,5 +1,7 @@
 const Discord = require('discord.js');
 const fs = require('fs');
+require('dotenv').config();
+
 const { prefix, token } = require('./config.json');
 
 const client = new Discord.Client();
@@ -41,4 +43,4 @@ client.on('message', message => {
 	}
 });
 
-client.login(token);
+client.login(process.env.NAGBOT_TOKEN);

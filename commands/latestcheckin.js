@@ -10,7 +10,6 @@ module.exports = {
 
 		fetch(untappdURL)
 			.then((res) => {
-				console.log(res);
 
 				if (res.statusText != 'OK') {
 					message.channel.send(`Unable to find Untappd user ${args}`);
@@ -18,7 +17,7 @@ module.exports = {
 				else {
 					(async () => {
 
-						message.channel.send(`Let's all judge ${args}'s latest tipple`);
+						message.channel.send('Is it a banger?!?!');
 
 						const browser = await puppeteer.launch({ headless: true, args:['--no-sandbox'] });
 						const page = await browser.newPage();
@@ -29,16 +28,18 @@ module.exports = {
 
 							const checkInDetails = document.querySelector('div[class="top"] > p').innerText;
 							const details = document.querySelector('div[class="bottom"] > a').getAttribute('href');
+							const ratings = document.querySelector('div[data-rating]').dataset.rating;
 
 							return {
 								checkInDetails,
 								details,
+								ratings,
 							};
 						});
 
 						const detailsURL = `https://untappd.com${latestCheckIn.details}`;
 
-						message.channel.send(`${latestCheckIn.checkInDetails}\nLinky: ${detailsURL}`);
+						message.channel.send(`${latestCheckIn.checkInDetails}\n${args}'s rating: **${latestCheckIn.ratings}**\nLinky: ${detailsURL}`);
 
 						await browser.close();
 					})();
