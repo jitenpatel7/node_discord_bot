@@ -1,49 +1,53 @@
-const puppeteer = require('puppeteer');
-const fetch = require('node-fetch');
+const cheerio = require('cheerio');
+const request = require('request');
 
 module.exports = {
 	name: 'lb',
 	description: 'Show off your latest beer! (Requires Untappd profile to be public)',
 	args:true,
 	execute(message, args) {
-		const untappdURL = `https://untappd.com/user/${args}`;
+		message.channel.send('Is it a banger?!? :beers:');
+		let checkinID;
+		const feedURL = `https://untappd.com/user/${args}/`;
 
-		fetch(untappdURL)
-			.then((res) => {
+		const retrieveCheckInID = new Promise((resolve, reject) => {
+			request(feedURL, (error, response, html) => {
+				if (!error && response.statusCode == 200) {
+					const $ = cheerio.load(html);
 
-				if (res.statusText != 'OK') {
-					message.channel.send(`Unable to find Untappd user ${args}`);
+					checkinID = $('.item').attr('data-checkin-id');
+
+					resolve(checkinID);
 				}
 				else {
-					(async () => {
-
-						message.channel.send('Is it a banger?!?!');
-
-						const browser = await puppeteer.launch({ headless: true, args:['--no-sandbox'] });
-						const page = await browser.newPage();
-
-						await page.goto(untappdURL, { waitUntil: 'networkidle2' });
-
-						const latestCheckIn = await page.evaluate(() => {
-
-							const checkInDetails = document.querySelector('div[class="top"] > p').innerText;
-							const details = document.querySelector('div[class="bottom"] > a').getAttribute('href');
-							const ratings = document.querySelector('div[data-rating]').dataset.rating;
-
-							return {
-								checkInDetails,
-								details,
-								ratings,
-							};
-						});
-
-						const detailsURL = `https://untappd.com${latestCheckIn.details}`;
-
-						message.channel.send(`${latestCheckIn.checkInDetails}\n${args}'s rating: **${latestCheckIn.ratings}**\nLinky: ${detailsURL}`);
-
-						await browser.close();
-					})();
+					reject(message.channel.send(`Hey ${message.author}, I was unable to find the Untappd user ${args}`));
 				}
 			});
+		});
+
+		retrieveCheckInID.then((output) => {
+			const checkinDetailsURL = `https://untpd.it/s/c${output}`;
+			request(checkinDetailsURL, (error, response, html) => {
+				if (!error && response.statusCode == 200) {
+					const $ = cheerio.load(html);
+
+					const untappdUserName = $('.name p').first().text();
+					const beer = $('.beer p').first().text();
+					const rating = $('.caps').attr('data-rating');
+					const drinker = untappdUserName.trim();
+
+					message.channel.send(`${drinker} is drinking ${beer} and has rated it ${rating} / 5\n${checkinDetailsURL}`);
+
+					if (rating >= 4) {
+						message.channel.send('Banger confirmed :beers:');
+					}
+				}
+				else {
+					message.channel.send(`Hey ${message.author}, I was unable to find the Untappd user ${args}`);
+				}
+			});
+		});
+
+
 	},
 };

@@ -10,6 +10,6 @@ module.exports = {
 			headers: { 'Accept': 'text/plain' },
 		})
 			.then(res => res.text())
-			.then(body => message.channel.send(`${body} :dazza:`));
+			.then(body => message.channel.send(`${body} :older_man:`));
 	},
 };
