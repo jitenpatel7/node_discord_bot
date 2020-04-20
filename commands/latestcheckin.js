@@ -6,18 +6,24 @@ module.exports = {
 	description: 'Show off your latest beer! (Requires Untappd profile to be public)',
 	args:true,
 	execute(message, args) {
-		message.channel.send('Is it a banger?!? :beers:');
 		let checkinID;
 		const feedURL = `https://untappd.com/user/${args}/`;
 
 		const retrieveCheckInID = new Promise((resolve, reject) => {
 			request(feedURL, (error, response, html) => {
 				if (!error && response.statusCode == 200) {
+					message.channel.send('Is it a banger?!? :beers:');
 					const $ = cheerio.load(html);
 
 					checkinID = $('.item').attr('data-checkin-id');
+					const activity = $('.stat').first().text();
 
-					resolve(checkinID);
+					if (activity == 0) {
+						reject(message.channel.send(`Hey ${message.author}, the Untappd user ${args} has not checked in any beer!`));
+					}
+					else {
+						resolve(checkinID);
+					}
 				}
 				else {
 					reject(message.channel.send(`Hey ${message.author}, I was unable to find the Untappd user ${args}`));
@@ -36,18 +42,18 @@ module.exports = {
 					const rating = $('.caps').attr('data-rating');
 					const drinker = untappdUserName.trim();
 
-					message.channel.send(`${drinker} is drinking ${beer} and has rated it ${rating} / 5\n${checkinDetailsURL}`);
+					if (rating == undefined) {
+						message.channel.send(`${drinker} is drinking ${beer}\n${checkinDetailsURL}`);
+					}
+					else {
+						message.channel.send(`${drinker} is drinking ${beer} and has rated it ${rating} / 5\n${checkinDetailsURL}`);
+					}
 
 					if (rating >= 4) {
 						message.channel.send('Banger confirmed :beers:');
 					}
 				}
-				else {
-					message.channel.send(`Hey ${message.author}, I was unable to find the Untappd user ${args}`);
-				}
 			});
 		});
-
-
 	},
 };
