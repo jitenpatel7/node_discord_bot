@@ -44,7 +44,7 @@ module.exports = {
 					const drinker = untappdUserName.trim();
 					const beer = $('.beer p').first().text();
 					const rating = $('.caps').attr('data-rating');
-					const badges = $('.badge').find('span').text().split('!')
+					const badges = $('.badge').find('span').text().split('Earned the')
 						.filter(badge => badge.length > 0);
 
 					if (rating == undefined) {
@@ -55,7 +55,7 @@ module.exports = {
 					}
 
 					message.channel.send(`${checkinDetailsURL}`);
-					badges.forEach(badge => message.channel.send(`*${badge}*`));
+					badges.forEach(badge => message.channel.send(`Earned the${badge}`));
 
 					if (rating >= 4) {
 						message.channel.send(`Banger confirmed. ${rating} / 5 :beers:`);
