@@ -7,6 +7,6 @@ module.exports = {
 		}
 		const taggedUser = message.mentions.users.first();
 
-		message.channel.send(`You wanted to kick: ${taggedUser.username}`);
+		return message.channel.send(`We're a friendly bunch ${message.author.username}, but don't expect any Christmas cards from ${taggedUser.username} this year`);
 	},
 };

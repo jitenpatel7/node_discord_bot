@@ -7,9 +7,9 @@ module.exports = {
 		const dadJokeURL = 'https://icanhazdadjoke.com/';
 
 		fetch(dadJokeURL, {
-			headers: { 'Accept': 'text/plain' },
+			headers: { Accept: 'text/plain' },
 		})
-			.then(res => res.text())
-			.then(body => message.channel.send(`${body} :older_man:`));
+			.then((res) => res.text())
+			.then((body) => message.channel.send(`${body} :older_man:`));
 	},
 };
