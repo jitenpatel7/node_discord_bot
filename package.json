@@ -28,6 +28,8 @@
     "request": "^2.88.2"
   },
   "devDependencies": {
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.2",
     "eslint": "7.0.0",
     "nodemon": "2.0.3"
   }
