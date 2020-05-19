@@ -1,4 +1,4 @@
-const beerDetailsExpression = /(.+\))/gm;
+const beerDetailsExpression = /(.+\%)/gm;
 const beerPriceExpression = /(£.+)/gm;
 
 const beerName = (str) => str.match(beerDetailsExpression);
