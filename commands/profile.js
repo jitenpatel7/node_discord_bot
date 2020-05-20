@@ -2,7 +2,7 @@ const cheerio = require('cheerio');
 const request = require('request');
 const { MessageEmbed } = require('discord.js');
 
-const untappdUserURL = require('../constants/untappd');
+const { untappdUserURL } = require('../constants/untappd');
 
 module.exports = {
 	name: 'profile',

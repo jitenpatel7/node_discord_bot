@@ -13,7 +13,7 @@ module.exports = {
 
         request(searchBeerUrl, (error, response, html) => {
             if (response.statusCode === 404) {
-                return;
+                return error;
             }
 
             const $ = cheerio.load(html);
