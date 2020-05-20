@@ -1,7 +1,7 @@
 const cheerio = require('cheerio');
 const request = require('request');
 
-const untappdUserURL = require('../constants/untappd');
+const { untappdUserURL } = require('../constants/untappd');
 
 module.exports = {
 	name: 'lb',
