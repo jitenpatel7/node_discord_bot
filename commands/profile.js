@@ -13,7 +13,6 @@ module.exports = {
 			if (!error && response.statusCode === 200) {
 				const $ = cheerio.load(html);
 
-
 				const userAvatar = $('.user-avatar').find('img').attr('src');
 				const userInfo = $('.stats').text();
 				const userCheckinStats = userInfo.split('\n').filter((el) => el.length > 0);
