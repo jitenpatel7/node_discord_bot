@@ -19,7 +19,7 @@ module.exports = {
 
 					checkinID = $('.item').attr('data-checkin-id');
 
-					// eslint-disable-next-line eqeqeq
+					// eslint-disable-next-line
 					if (activity == 0) {
 						reject(message.channel.send(`Hey ${message.author}, the Untappd user ${args} has not checked in any beer!`));
 					} else {
