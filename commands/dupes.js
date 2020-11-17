@@ -1,3 +1,4 @@
+/* eslint-disable no-loop-func */
 /* eslint-disable consistent-return */
 /* eslint-disable no-await-in-loop */
 const cheerio = require('cheerio');
@@ -17,6 +18,8 @@ module.exports = {
 		}
 
 		const beerList = [];
+		let beerAndRatings = [];
+
 		message.channel.send('Raiding fridges, please hold..... :stopwatch:');
 
 		(async function () {
@@ -49,11 +52,23 @@ module.exports = {
 								.trim();
 							beerList.push(`\n${beer}`);
 						});
+
+						getFridgeBody('.rating-avg').each((i, el) => {
+							const rating = getFridgeBody(el)
+								.text()
+								.trim();
+							beerAndRatings = beerList.map((x) => `${x} ${rating}`);
+						});
 					});
 			}
 
-			const beersToShare = dupesFilter(beerList, args);
-			message.channel.send(`The choices you make in your life, will make your life.\nChoose wisely :beers: \n${beersToShare}`);
+			const beersToShare = dupesFilter(beerAndRatings, args);
+
+			if (beersToShare.length < 1) {
+				message.channel.send(':exclamation: No dupes found this time :pouting_cat:');
+			} else {
+				message.channel.send(`Dupes found :beers: :beers: \n${beersToShare}`);
+			}
 		}());
 	},
 };
