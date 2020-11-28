@@ -5,6 +5,7 @@ const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 
 const { dupesFilter } = require('../utils/dupesFilter');
+const { getWebElementDetails } = require('../utils/getWebElementDetails.js');
 const { untappdUserURL, untappdHome } = require('../constants/untappd');
 
 module.exports = {
@@ -18,7 +19,7 @@ module.exports = {
 		}
 
 		const beerList = [];
-		let beerAndRatings = [];
+		const ratingsList = [];
 
 		message.channel.send('Raiding fridges, please hold..... :stopwatch:');
 
@@ -43,24 +44,17 @@ module.exports = {
 
 				await fetch(fridgeLink)
 					.then((res) => res.text())
-					.then((fridgeBody) => {
-						const getFridgeBody = cheerio.load(fridgeBody);
+					.then((body) => {
+						const beerName = '.item-info-container h2';
+						const beerRating = '.rating-avg';
 
-						getFridgeBody('.item-info-container h2').each((i, el) => {
-							const beer = getFridgeBody(el)
-								.text()
-								.trim();
-							beerList.push(`\n${beer}`);
-						});
+						getWebElementDetails(body, beerName, beerList);
 
-						getFridgeBody('.rating-avg').each((i, el) => {
-							const rating = getFridgeBody(el)
-								.text()
-								.trim();
-							beerAndRatings = beerList.map((x) => `${x} ${rating}`);
-						});
+						getWebElementDetails(body, beerRating, ratingsList);
 					});
 			}
+
+			const beerAndRatings = beerList.map((e, i) => `\n${e} ${ratingsList[i]}`);
 
 			const beersToShare = dupesFilter(beerAndRatings, args);
 
