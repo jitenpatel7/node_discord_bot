@@ -1,4 +1,4 @@
-FROM node:12.16.2-stretch
+FROM node:12.22.12-stretch
 
 RUN apt-get update
 
